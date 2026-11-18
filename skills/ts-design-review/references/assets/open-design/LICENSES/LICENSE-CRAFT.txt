@@ -1,0 +1,58 @@
+craft/ 内置资产许可与出处说明
+================================
+
+本目录（assets/open-design/craft/）内的全部 .md 规则书，版权归属与许可如下。
+
+出处
+----
+
+craft/ 内容来自 OpenDesign 仓库的 craft/ 目录：
+
+    源仓库：open-design（v0.21.1）
+    源路径：<open-design>/craft/*.md
+
+OpenDesign 将其 craft/ 内容标注为改编自 MIT 许可的 refero_skill 项目
+（见源仓库 craft/README.md 的 "Attribution" 一节，随本目录副本一并保留）：
+
+    上游项目：refero_skill
+    上游地址：https://github.com/referodesign/refero_skill
+    版权归属：© Refero Design
+    许可：MIT License
+    改编说明：OpenDesign 团队为契合其内部风格、并把示例中的通用 Tailwind
+              色值改为指向 OD 自身设计 token（var(--accent) 等）而作了编辑。
+
+本副本（tiansupowers）为 OpenDesign craft/ 的**逐字复制**，未作二次改编。
+若需将示例 token 落到天溯体系，映射关系见仓库根 README / 集成说明：
+原型与实现都不填 `:root`、都不用自定义前缀变量，视觉一律来自组件库主题
+（`--te-*` 由 ts-web-package 提供），实现侧用 `var(--te-*)` 或 Te 组件 props
+——**不引入 `--accent`**。
+
+MIT License 正文
+----------------
+
+Copyright (c) Refero Design
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+核对提示
+--------
+
+上游未在正文中标注具体年份；此处版权行按上游记录的
+"© Refero Design" 原样书写，未补年份。若贵方合规要求完整年份，
+请以 refero_skill 仓库 LICENSE 文件为准并回填本文件。

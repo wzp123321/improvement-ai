@@ -1,0 +1,545 @@
+<!doctype html>
+<!--
+  tiansu-web · 高保真组件夹具（components fixture）
+
+  用途：给「从 PRD 生成高保真界面」的模型 / 评审者一份「Te 业务系统渲染得像不像」的可视基准。
+  它不是真实组件库，是**自包含静态对照样张**：所有颜色值取自真实 Te 主题快照，
+  几何尺寸（高度/内边距/密度）为近似，最终渲染以真实 `@tiansu/ts-web-package` 组件为准。
+
+  ===== 值源（四色族，真实主题快照，勿改）=====
+  来源：D:\preject\ts-web-package\packages\theme-chalk\src\common\
+    · extraVar.scss  → $te-colors 的 gray / gray_brand / brand / success / warning / danger 10 级色板 + data1–10
+    · var.scss       → $text-color（黑底 alpha）、$border-color、$bg-color、$fill-color、$border-radius、$box-shadow
+    · DESIGN.md §Color / tsweb design --format json → 主色/语义基准色、字号、间距、圆角
+  变量命名沿用 Te 运行时 emit 语义（--te-bg-color-page 等），数值全部解析为最终 hex/rgba，可独立运行。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tiansu-web 高保真组件夹具</title>
+<style>
+  :root{
+    /* ============ 角色色（基准 = tsweb design / var.scss $colors base）============ */
+    --te-color-white:#ffffff; --te-color-black:#000000;
+    --te-color-primary:#0e6dfa; --te-color-success:#21b534; --te-color-warning:#fa8205;
+    --te-color-danger:#e60a15; --te-color-error:#e60a15; --te-color-info:#909399;
+
+    /* ============ 语义级联（extraVar.scss $te-colors.color.*，等级越小越浅）============ */
+    /* primary：hover=brand6, active=brand8, disabled=brand5, light(bg)=brand1, light-hover=brand2, light-border=brand3 */
+    --te-color-primary-hover:#5699FC; --te-color-primary-active:#0B57C8; --te-color-primary-disabled:#86B6FD;
+    --te-color-primary-light:#E6F0FE; --te-color-primary-light-hover:#CFE2FE; --te-color-primary-light-border:#B7D3FD;
+    --te-color-success-hover:#64CB71; --te-color-success-active:#1A912A; --te-color-success-light:#E8F7EA; --te-color-success-light-border:#BCE9C2;
+    --te-color-warning-hover:#FCA750; --te-color-warning-active:#C86804; --te-color-warning-light:#FEF2E6; --te-color-warning-light-border:#FDD9B4;
+    --te-color-danger-hover:#EE545B;  --te-color-danger-active:#B80811;  --te-color-danger-light:#FCE6E7;  --te-color-danger-light-border:#F7B5B9;
+    --te-color-info-hover:#B5B5B5;    --te-color-info-active:#828282;    --te-color-info-light:#F7F7F7;    --te-color-info-light-border:#EDEDED;
+
+    /* ============ 文字（var.scss $text-color，黑底 alpha，regular=primary）============ */
+    --te-text-color-primary:rgba(0,0,0,0.85);   /* 标题/正文强调 */
+    --te-text-color-regular:rgba(0,0,0,0.85);   /* 常规正文（=primary） */
+    --te-text-color-secondary:rgba(0,0,0,0.55); /* 次要信息/说明 */
+    --te-text-color-placeholder:rgba(0,0,0,0.40);/* 占位符 */
+    --te-text-color-disabled:rgba(0,0,0,0.25);  /* 禁用 */
+
+    /* ============ 表面（var.scss $bg-color ← extraVar gray_brand）============ */
+    --te-bg-color:#ffffff;            /* 画布内容区默认 */
+    --te-bg-color-overlay:#ffffff;    /* 弹层/下拉 */
+    --te-bg-color-page:#F5F6F8;       /* 页面底色 = gray_brand 1 */
+    --te-bg-color-secondary:#EEF0F3;  /* 次级面 = gray_brand 2 */
+    --te-bg-color-tertiary:#E7EAEF;   /* 三级面 = gray_brand 3 */
+    --te-bg-color-component:#D3D9E2;  /* 组件填充 = gray_brand 5 */
+    --te-bg-color-component-hover:#DFE4EB;  /* = gray_brand 4 */
+    --te-bg-color-component-active:#AAB2BE; /* = gray_brand 6 */
+    --te-bg-color-component-disabled:#EEF0F3;/* = gray_brand 2 */
+    --te-bg-color-blank:#FFFFFF;
+
+    /* ============ 边框（var.scss $border-color ← gray；divider/light 细缘）============ */
+    --te-border-color:#DEDEDE;              /* 控件描边 = gray 5 */
+    --te-border-color-component:#DEDEDE;    /* = gray 5 */
+    --te-border-color-component-hover:#B5B5B5;/* hover = gray 6 */
+    --te-border-color-component-light:#E8E8E8;/* = gray 4 */
+    --te-border-color-light:#E4E7ED;
+    --te-border-color-extra-light:#F2F6FC;
+    --te-border-color-divider:#E8E8E8;      /* 表格分隔线 = gray 4 */
+    --te-border-color-divider-light:#EDEDED;/* = gray 3 */
+
+    /* ============ 填充（var.scss $fill-color；表头/斑马/禁用输入底）============ */
+    --te-fill-color:#f0f2f5; --te-fill-color-extra-light:#fafcff;
+    --te-fill-color-blank:#fff; --te-fill-color-lighter:#F5F6F8; /* = bg-page 页面底浅档 */
+
+    /* ============ 数据系列色（extraVar $te-colors data1–10，图表/多序列）============ */
+    --te-color-data1-default:#0E6DFA; --te-color-data1-light:#E6F0FE; --te-color-data1-light-border:#B7D3FD;
+    --te-color-data2-default:#13C2C2; --te-color-data2-light:#E7F8F8; --te-color-data2-light-border:#B8EDED;
+    --te-color-data3-default:#FA8205; --te-color-data3-light:#FEF2E6; --te-color-data3-light-border:#FDD9B4;
+    --te-color-data4-default:#21B534; --te-color-data4-light:#E8F7EA; --te-color-data4-light-border:#BCE9C2;
+    --te-color-data5-default:#722ED1; --te-color-data5-light:#F0EAFA; --te-color-data5-light-border:#D5C0F1;
+    /* data6–10 完整 default/light/light-border 见 tokens.css / Colors 页 */
+
+    /* ============ 几何（tsweb design 或 Te 组件近似，最终以真实组件为准）============ */
+    --te-border-radius-base:4px; --te-border-radius-small:2px; --te-border-radius-round:20px; --te-border-radius-circle:100%;
+    --te-font-size-b12:12px; --te-font-size-b14:14px; --te-font-size-h16:16px; --te-font-size-h20:20px; --te-font-size-h24:24px; /* b=正文 h=标题（tokens 同名同值） */
+    --te-component-size:32px; --te-component-size-small:24px; --te-component-size-large:40px;
+    --te-box-shadow:0 2px 6px -3px rgba(0,0,0,.10), 0 4px 12px rgba(0,0,0,.08), 0 6px 18px 6px rgba(0,0,0,.06);
+    --te-box-shadow-light:0 2px 6px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.10);
+    --te-font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;
+  }
+
+  /* ===== 基础 ===== */
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--te-bg-color-page); color:var(--te-text-color-regular);
+       font-family:var(--te-font-family); font-size:14px; line-height:1.7; -webkit-font-smoothing:antialiased}
+  h1,h2,h3{color:var(--te-text-color-primary); line-height:1.35; font-weight:600; margin:0}
+  h1{font-size:24px} h2{font-size:16px} h3{font-size:14px}
+  .page{padding:32px 40px; max-width:1200px; margin:0 auto}
+  .spec-head{margin-bottom:32px}
+  .spec-head .crumb{font-size:12px; color:var(--te-text-color-secondary); margin-bottom:8px}
+  .spec-head .crumb a{color:var(--te-color-primary); text-decoration:none}
+  .spec-head .desc{color:var(--te-text-color-secondary); font-size:14px; margin-top:6px; max-width:72ch}
+
+  .section{background:var(--te-bg-color); border:1px solid var(--te-border-color-light); border-radius:var(--te-border-radius-base);
+           padding:24px 28px; margin-bottom:32px}
+  .section > h2{margin-bottom:4px; display:flex; align-items:baseline; gap:12px}
+  .section > h2 .en{font-size:12px; font-weight:400; color:var(--te-text-color-placeholder)}
+  .section > .sub{color:var(--te-text-color-secondary); font-size:13px; margin:0 0 20px}
+  .field{margin-bottom:20px}
+  .field:last-child{margin-bottom:0}
+  .field .label{font-size:13px; color:var(--te-text-color-secondary); margin-bottom:12px}
+
+  /* ===== 按钮（TeButton）===== */
+  .fx-btn{display:inline-flex; align-items:center; justify-content:center; gap:4px; height:var(--te-component-size);
+          padding:0 16px; border-radius:var(--te-border-radius-base); border:1px solid transparent;
+          font-size:14px; font-family:inherit; line-height:1; cursor:pointer; white-space:nowrap;
+          transition:background-color .2s cubic-bezier(0.2,0,0,1), border-color .2s, color .2s}
+  .fx-btn:focus-visible{outline:2px solid var(--te-color-primary); outline-offset:2px}
+  .fx-btn.is-primary{background:var(--te-color-primary); color:#fff}
+  .fx-btn.is-primary:hover{background:var(--te-color-primary-hover)}
+  .fx-btn.is-primary:active{background:var(--te-color-primary-active)}
+  .fx-btn.is-primary.is-disabled,.fx-btn.is-primary:disabled{background:var(--te-color-primary-disabled); color:#fff; cursor:not-allowed}
+  .fx-btn.is-plain{background:var(--te-bg-color); border-color:var(--te-border-color); color:var(--te-text-color-regular)}
+  .fx-btn.is-plain:hover{color:var(--te-color-primary); border-color:var(--te-color-primary)}
+  .fx-btn.is-primary-plain{background:var(--te-color-primary-light); border-color:var(--te-color-primary-light-border); color:var(--te-color-primary)}
+  .fx-btn.is-primary-plain:hover{background:var(--te-color-primary-light-hover); border-color:var(--te-color-primary)}
+  .fx-btn.is-primary-plain:active{color:var(--te-color-primary-active)}
+  .fx-btn.is-success{background:var(--te-color-success); color:#fff}
+  .fx-btn.is-success:hover{background:var(--te-color-success-hover)}
+  .fx-btn.is-success:active{background:var(--te-color-success-active)}
+  .fx-btn.is-danger{background:var(--te-color-danger); color:#fff}
+  .fx-btn.is-danger:hover{background:var(--te-color-danger-hover)}
+  .fx-btn.is-danger:active{background:var(--te-color-danger-active)}
+  .fx-btn.is-danger-plain{background:var(--te-color-danger-light); border-color:var(--te-color-danger-light-border); color:var(--te-color-danger)}
+  .fx-btn.is-danger-plain:hover{background:var(--te-color-danger-light-border); color:var(--te-color-danger)}
+  .fx-btn.is-warning{background:var(--te-color-warning); color:#fff}
+  .fx-btn.is-warning:hover{background:var(--te-color-warning-hover)}
+  .fx-btn.is-info{background:var(--te-color-info); color:#fff}
+  .fx-btn.is-link{background:transparent; color:var(--te-color-primary); height:auto; padding:0; border:none; font-size:14px}
+  .fx-btn.is-link:hover{color:var(--te-color-primary-hover)}
+  .fx-btn.is-link.is-danger{color:var(--te-color-danger)}
+  .fx-btn.is-link.is-danger:hover{color:var(--te-color-danger-hover)}
+  .fx-btn.is-disabled,.fx-btn:disabled{opacity:.6; cursor:not-allowed}
+  .fx-btn .ic{font-size:0; display:inline-flex}
+  .fx-btn .ic svg{width:14px; height:14px; fill:currentColor}
+  .fx-btn-group{display:inline-flex}
+  .fx-btn-group .fx-btn{border-radius:0}
+  .fx-btn-group .fx-btn:first-child{border-radius:var(--te-border-radius-base) 0 0 var(--te-border-radius-base)}
+  .fx-btn-group .fx-btn:last-child{border-radius:0 var(--te-border-radius-base) var(--te-border-radius-base) 0}
+
+  /* ===== 输入（TeInput / TeSelect）===== */
+  .fx-input,.fx-select{height:var(--te-component-size); padding:0 12px; border:1px solid var(--te-border-color);
+          border-radius:var(--te-border-radius-base); background:var(--te-bg-color-blank); font-size:14px; font-family:inherit;
+          color:var(--te-text-color-regular); width:100%; outline:none; transition:border-color .2s cubic-bezier(0.2,0,0,1)}
+  .fx-input::placeholder,.fx-select::placeholder{color:var(--te-text-color-placeholder)}
+  .fx-input:hover,.fx-select:hover{border-color:var(--te-border-color-component-hover)}
+  .fx-input:focus,.fx-select:focus{border-color:var(--te-color-primary)}
+  .fx-input:disabled{background:var(--te-fill-color); color:var(--te-text-color-disabled); cursor:not-allowed}
+  .fx-input.is-error{border-color:var(--te-color-danger)}
+  .fx-input.is-error:focus{border-color:var(--te-color-danger)}
+  .fx-input-wrap{position:relative}
+  .fx-input-wrap .prefix{position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--te-text-color-placeholder); display:flex}
+  .fx-input-wrap .prefix ~ .fx-input{padding-left:30px}
+  .fx-input-wrap .suffix{position:absolute; right:10px; top:50%; transform:translateY(-50%); display:flex; gap:6px}
+  .fx-input-wrap .suffix .mini{color:var(--te-text-color-secondary); font-size:13px}
+  .fx-select-wrap{position:relative}
+  .fx-select{appearance:none; padding-right:28px; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%23828282' stroke-width='1.5'/></svg>"); background-repeat:no-repeat; background-position:right 10px center; cursor:pointer}
+  .fx-form-item{margin-bottom:20px}
+  .fx-form-item .f-label{font-size:14px; color:var(--te-text-color-primary); margin-bottom:6px; display:flex; gap:2px}
+  .fx-form-item .f-label .req{color:var(--te-color-danger); margin-left:2px}
+  .fx-form-item .f-label .tip{color:var(--te-text-color-placeholder); font-size:12px; font-weight:400}
+  .fx-form-item .f-help{font-size:12px; color:var(--te-text-color-placeholder); margin-top:4px}
+  .fx-form-item .f-help.is-error{color:var(--te-color-danger)}
+  .fx-check{display:inline-flex; align-items:center; gap:8px; cursor:pointer; font-size:14px; color:var(--te-text-color-regular); margin-right:16px}
+  .fx-check input{accent-color:var(--te-color-primary); width:14px; height:14px; margin:0}
+  .fx-radio{accent-color:var(--te-color-primary); width:14px; height:14px}
+  .fx-switch{appearance:none; width:40px; height:22px; border-radius:var(--te-border-radius-round); background:var(--te-border-color-component); position:relative; cursor:pointer; outline:none; transition:background-color .2s cubic-bezier(0.2,0,0,1)}
+  .fx-switch::after{content:''; position:absolute; left:2px; top:2px; width:18px; height:18px; border-radius:var(--te-border-radius-circle); background:#fff; transition:left .2s cubic-bezier(0.2,0,0,1); box-shadow:0 1px 2px rgba(0,0,0,.15)}
+  .fx-switch:checked{background:var(--te-color-primary)}
+  .fx-switch:checked::after{left:20px}
+  .fx-switch:focus-visible{outline:2px solid var(--te-color-primary); outline-offset:2px}
+
+  /* ===== 表格（TeModuleTable 密度近似）===== */
+  .fx-table-wrap{border:1px solid var(--te-border-color-divider-light); border-radius:var(--te-border-radius-base); overflow:hidden; background:var(--te-bg-color)}
+  .fx-table{width:100%; border-collapse:collapse; font-size:14px}
+  .fx-table th{background:var(--te-bg-color-secondary); color:var(--te-text-color-secondary); font-weight:500; text-align:left;
+        padding:9px 16px; border-bottom:1px solid var(--te-border-color-divider-light); white-space:nowrap}
+  .fx-table td{padding:9px 16px; border-bottom:1px solid var(--te-border-color-divider-light); color:var(--te-text-color-regular); vertical-align:middle}
+  .fx-table tbody tr:last-child td{border-bottom:none}
+  .fx-table tbody tr:hover td{background:var(--te-fill-color-lighter)}
+  .fx-table .cell-nowrap{white-space:nowrap}
+  .fx-table .cell-main{color:var(--te-text-color-primary)}
+  .fx-table .cell-sub{color:var(--te-text-color-secondary); font-size:12px}
+  .fx-table .ops .fx-btn{margin-right:12px}
+  .fx-check-table{accent-color:var(--te-color-primary)}
+
+  /* ===== 标签（TeTag）===== */
+  .fx-tag{display:inline-flex; align-items:center; height:24px; padding:0 10px; border-radius:var(--te-border-radius-small); font-size:12px; line-height:1; border:1px solid transparent}
+  .fx-tag.is-success{background:var(--te-color-success-light); color:var(--te-color-success); border-color:var(--te-color-success-light-border)}
+  .fx-tag.is-danger{background:var(--te-color-danger-light); color:var(--te-color-danger); border-color:var(--te-color-danger-light-border)}
+  .fx-tag.is-warning{background:var(--te-color-warning-light); color:var(--te-color-warning); border-color:var(--te-color-warning-light-border)}
+  .fx-tag.is-info{background:var(--te-color-info-light); color:var(--te-color-info); border-color:var(--te-color-info-light-border)}
+  .fx-tag.is-primary{background:var(--te-color-primary-light); color:var(--te-color-primary); border-color:var(--te-color-primary-light-border)}
+  .fx-tag .dot{width:6px; height:6px; border-radius:50%; margin-right:6px; background:currentColor}
+
+  /* ===== 告警/空态/消息（TeAlert / TeEmpty / TeMessage）===== */
+  .fx-alert{display:flex; gap:10px; padding:12px 16px; border-radius:var(--te-border-radius-base); font-size:14px; border:1px solid}
+  .fx-alert.is-error{background:var(--te-color-danger-light); border-color:var(--te-color-danger-light-border); color:var(--te-color-danger)}
+  .fx-alert.is-success{background:var(--te-color-success-light); border-color:var(--te-color-success-light-border); color:var(--te-color-success)}
+  .fx-alert .a-title{font-weight:500}
+  .fx-empty{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:48px 0; color:var(--te-text-color-secondary)}
+  .fx-empty svg{width:56px; height:56px; stroke:var(--te-border-color-component); margin-bottom:12px}
+  .fx-empty .e-title{color:var(--te-text-color-primary); font-size:14px}
+  .fx-empty .e-sub{font-size:12px; color:var(--te-text-color-placeholder); margin-top:4px}
+
+  /* ===== 骨架 ===== */
+  .fx-skel{height:14px; border-radius:var(--te-border-radius-small); background:linear-gradient(90deg,var(--te-fill-color) 25%,var(--te-border-color-extra-light) 37%,var(--te-fill-color) 63%); background-size:400% 100%; animation:sk 1.4s ease infinite}
+  @keyframes sk{0%{background-position:100% 0} 100%{background-position:0 0}}
+  @keyframes rot{to{transform:rotate(360deg)}}
+  .fx-skel-row td{padding:12px 16px}
+
+  /* ===== 弹层样张（TeDialog 视觉近似，静态演示）===== */
+  .fx-dialog{border-radius:var(--te-border-radius-base); background:var(--te-bg-color-overlay); box-shadow:var(--te-box-shadow); width:100%; overflow:hidden}
+  .fx-dialog .d-head{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:1px solid var(--te-border-color-divider-light)}
+  .fx-dialog .d-title{font-size:16px; font-weight:500; color:var(--te-text-color-primary)}
+  .fx-dialog .d-close{cursor:pointer; color:var(--te-text-color-placeholder); display:flex; font-size:0}
+  .fx-dialog .d-close:hover{color:var(--te-text-color-regular)}
+  .fx-dialog .d-body{padding:24px; color:var(--te-text-color-regular)}
+  .fx-dialog .d-foot{display:flex; justify-content:flex-end; gap:12px; padding:0 24px 20px}
+
+  /* ===== 描述（TeDescriptions）===== */
+  .fx-desc{width:100%; border-collapse:collapse; font-size:14px}
+  .fx-desc td{border:1px solid var(--te-border-color-divider-light); padding:9px 16px}
+  .fx-desc td.k{background:var(--te-bg-color-secondary); color:var(--te-text-color-secondary); width:120px; white-space:nowrap}
+
+  /* ===== 工具栏（TeModuleTable 顶栏）===== */
+  .fx-toolbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; padding:0 0 16px}
+  .fx-toolbar .grow{flex:1}
+  .fx-toolbar .title{font-size:16px; font-weight:600; color:var(--te-text-color-primary)}
+  .fx-pager{display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:14px 0 0; color:var(--te-text-color-secondary); font-size:13px}
+  .fx-pagebtn{min-width:24px; height:24px; border:1px solid var(--te-border-color); background:var(--te-bg-color); border-radius:var(--te-border-radius-small); color:var(--te-text-color-regular); font-size:12px; cursor:pointer; padding:0 6px}
+  .fx-pagebtn:hover{color:var(--te-color-primary); border-color:var(--te-color-primary)}
+  .fx-pagebtn.is-active{background:var(--te-color-primary); border-color:var(--te-color-primary); color:#fff}
+
+  /* ===== 演示控件 ===== */
+  .demo-bar{display:flex; align-items:center; gap:8px; margin-bottom:16px; padding:10px 14px; background:var(--te-bg-color-page); border-radius:var(--te-border-radius-base); font-size:13px; color:var(--te-text-color-secondary); flex-wrap:wrap}
+  .demo-bar .seg{display:inline-flex; border:1px solid var(--te-border-color); border-radius:var(--te-border-radius-base); overflow:hidden}
+  .demo-bar .seg button{border:none; background:var(--te-bg-color); padding:4px 12px; font-size:13px; font-family:inherit; color:var(--te-text-color-secondary); cursor:pointer}
+  .demo-bar .seg button.is-on{background:var(--te-color-primary); color:#fff}
+  [hidden]{display:none !important}
+  .row{display:flex; gap:16px; flex-wrap:wrap; align-items:center}
+  .muted{color:var(--te-text-color-secondary)}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important} }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="spec-head">
+    <div class="crumb"><a href="preview/colors.html">Colors</a> · <a href="preview/typography.html">Typography</a> · <a href="preview/spacing.html">Spacing</a> · 本页 Components</div>
+    <h1>tiansu-web 高保真组件夹具</h1>
+    <p class="desc">Te 业务系统「渲染得像不像」的可视基准样张。角色色、文字、表面、边框、数据色均为真实主题快照（值源见文件头注释）；几何为近似，落实现以真实组件为准。本页专供 PRD→高保真 时对照：选中即说明你要长成这个样子。</p>
+  </div>
+
+  <!-- ================= 一、工具条 + 主操作（一张业务 CRUD 屏的脸） ================= -->
+  <section class="section">
+    <h2>一、业务屏骨架（工具栏 + 主操作）<span class="en">page toolbar</span></h2>
+    <p class="sub">最常用的「模块页」顶栏形态：左标题、右主操作；第二行筛选 + 批量操作。整体克制、密度适中。</p>
+    <div class="fx-toolbar">
+      <div class="title">项目台账</div>
+      <div class="grow"></div>
+      <div style="display:flex;gap:12px">
+        <div class="fx-input-wrap" style="width:220px"><span class="prefix"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <!-- vue: TeInput placeholder="搜索项目名/编号" :prefix-icon="Search" clearable style="width:220px" -->
+          <input class="fx-input" placeholder="搜索项目名 / 编号"></div>
+        <!-- vue: TeButton type="primary" @click="onCreate" --><button class="fx-btn is-primary"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>新建项目</button>
+      </div>
+    </div>
+    <div class="demo-bar">
+      <span>演示：表格状态</span>
+      <div class="seg" role="tablist" aria-label="表格状态演示">
+        <button data-state="data" class="is-on">数据</button>
+        <button data-state="loading">加载</button>
+        <button data-state="empty">空态</button>
+        <button data-state="error">错误</button>
+      </div>
+      <span class="muted">（按 rules/ui-prototype-standard.md §5：loading / empty / error / populated / edge 五态）</span>
+    </div>
+    <div class="fx-table-wrap">
+      <table class="fx-table">
+        <thead>
+          <tr>
+            <th style="width:34px"><input type="checkbox" class="fx-check-table" aria-label="全选"></th>
+            <th>项目名称</th><th>项目编号</th><th>负责人</th><th>状态</th><th>更新于</th><th style="text-align:right">操作</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <!-- 空态（覆盖占位；数据为空时显示）-->
+      <div id="emptyState" class="fx-empty" hidden>
+        <!-- vue: TeEmpty description="暂无项目数据" --><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="10" width="32" height="30" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 18h32M14 14.5h.01M18 14.5h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <div class="e-title">暂无项目数据</div>
+        <div class="e-sub">调整筛选条件，或点击「新建项目」开始</div>
+      </div>
+      <!-- 加载态骨架 -->
+      <div id="loadingState" class="fx-empty" style="display:none">
+        <div style="width:100%;padding:4px 0">
+          <table class="fx-table"><tbody>
+            <tr class="fx-skel-row"><td style="width:34px"></td><td><div class="fx-skel" style="width:60%"></div></td><td><div class="fx-skel" style="width:30%"></div></td><td><div class="fx-skel" style="width:40%"></div></td><td><div class="fx-skel" style="width:50px"></div></td><td><div class="fx-skel" style="width:70px"></div></td><td></td></tr>
+            <tr class="fx-skel-row"><td></td><td><div class="fx-skel" style="width:70%"></div></td><td><div class="fx-skel" style="width:26%"></div></td><td><div class="fx-skel" style="width:44%"></div></td><td><div class="fx-skel" style="width:50px"></div></td><td><div class="fx-skel" style="width:64px"></div></td><td></td></tr>
+            <tr class="fx-skel-row"><td></td><td><div class="fx-skel" style="width:55%"></div></td><td><div class="fx-skel" style="width:34%"></div></td><td><div class="fx-skel" style="width:36%"></div></td><td><div class="fx-skel" style="width:50px"></div></td><td><div class="fx-skel" style="width:80px"></div></td><td></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+    </div>
+    <!-- 错误态（数据加载失败）-->
+    <div id="errorState" hidden style="margin-top:16px">
+      <div class="fx-alert is-error"><span>⚠</span><div><span class="a-title">项目列表加载失败</span><br>接口连接超时（× 3 次自动重试后中断）。请检查网关状态后点「重试」。</div>
+        <button class="fx-btn is-danger-plain" style="height:28px;padding:0 12px;margin-left:auto;align-self:center" onclick="showState('data')">重试</button></div>
+    </div>
+    <div class="fx-pager">
+      共 <b>128</b> 条
+      <button class="fx-pagebtn" aria-label="上一页">‹</button>
+      <button class="fx-pagebtn is-active">1</button><button class="fx-pagebtn">2</button><button class="fx-pagebtn">3</button>
+      <span class="muted">…</span><button class="fx-pagebtn">13</button>
+      <button class="fx-pagebtn" aria-label="下一页">›</button>
+      <span class="muted">10 条/页</span>
+    </div>
+  </section>
+
+  <!-- ================= 二、按钮 ================= -->
+  <section class="section">
+    <h2>二、按钮 <span class="en">TeButton</span></h2>
+    <p class="sub">基准 #0e6dfa。hover 取 6 级（变浅）、active 取 8 级（变深）、禁用 5 级；默认「实心主色」仅主操作用（每屏 ≤1）。次要操作用边框/浅底；危险操作独立 danger，不挪用主色。</p>
+    <div class="field">
+      <div class="label">类型</div>
+      <div class="row">
+        <!-- vue: TeButton type="primary" --><button class="fx-btn is-primary">主要按钮</button>
+        <!-- vue: TeButton (默认/次级) --><button class="fx-btn is-plain">次要按钮</button>
+        <!-- vue: TeButton type="primary" plain --><button class="fx-btn is-primary-plain">浅色主按钮</button>
+        <!-- vue: TeButton type="success" --><button class="fx-btn is-success">成功</button>
+        <!-- vue: TeButton type="warning" --><button class="fx-btn is-warning">警告</button>
+        <!-- vue: TeButton type="danger" --><button class="fx-btn is-danger">危险</button>
+        <!-- vue: TeButton type="info" --><button class="fx-btn is-info">信息</button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="label">危险描边 / 禁用 / 文本链</div>
+      <div class="row">
+        <!-- vue: TeButton type="danger" plain --><button class="fx-btn is-danger-plain">危险描边</button>
+        <!-- vue: TeButton type="primary" disabled --><button class="fx-btn is-primary is-disabled" disabled>禁用主按钮</button>
+        <!-- vue: TeButton type="primary" disabled plain --><button class="fx-btn is-primary-plain is-disabled" disabled>禁用浅色</button>
+        <!-- vue: TeButton link --><button class="fx-btn is-link">查看</button>
+        <!-- vue: TeButton link type="danger" --><button class="fx-btn is-link is-danger">删除</button>
+        <button class="fx-btn is-link" disabled style="color:var(--te-text-color-disabled)">禁用链接</button>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <div class="label">加载与分组</div>
+      <div class="row">
+        <button class="fx-btn is-primary"><span class="ic" style="margin-right:4px"><svg viewBox="0 0 24 24" class="spin" style="animation:rot 1s linear infinite"><path d="M12 3a9 9 0 1 0 9 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>提交中…</button>
+        <div class="fx-btn-group">
+          <button class="fx-btn is-plain">导出</button>
+          <button class="fx-btn is-plain">导入</button>
+          <button class="fx-btn is-primary">批量操作</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 三、表单控件 ================= -->
+  <section class="section">
+    <h2>三、表单控件 <span class="en">form controls</span></h2>
+    <p class="sub">控件高 32 / 圆角 4px；聚焦描边取主色，禁用输入取 fill 底 + disabled 文字。错误态独立 danger + 下方文案（发生了什么 → 能做什么）。</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 32px">
+      <div>
+        <!-- vue: TeForm :model="form" label-width="80px" -->
+        <div class="fx-form-item">
+          <div class="f-label">项目名称 <span class="req">*</span></div>
+          <!-- vue: TeInput v-model="form.name" placeholder="请输入项目名称" -->
+          <input class="fx-input" placeholder="请输入项目名称" value="配电物联网示范站">
+        </div>
+        <div class="fx-form-item">
+          <div class="f-label">负责人 <span class="req">*</span></div>
+          <!-- vue: TeSelect v-model="form.owner" placeholder="请选择负责人" -->
+          <div class="fx-select-wrap"><select class="fx-select"><option>张工（研发一组）</option><option>李工（研发二组）</option><option>王工（交付一组）</option></select></div>
+        </div>
+        <div class="fx-form-item">
+          <div class="f-label">所属组织</div>
+          <div class="row">
+            <!-- vue: TeRadioGroup --><label class="fx-check"><input type="radio" class="fx-radio" name="org" checked>变电</label>
+            <label class="fx-check"><input type="radio" class="fx-radio" name="org">输电</label>
+            <label class="fx-check"><input type="radio" class="fx-radio" name="org">配电</label>
+          </div>
+        </div>
+        <div class="fx-form-item" style="margin-bottom:0">
+          <div class="f-label">关联预警</div>
+          <!-- vue: TeSwitch --><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" class="fx-switch" checked><span class="muted" style="font-size:13px">自动关联实时预警通道</span></label>
+        </div>
+      </div>
+      <div>
+        <div class="fx-form-item">
+          <div class="f-label">计划工期</div>
+          <div class="row" style="gap:8px">
+            <div class="fx-input-wrap" style="flex:1;min-width:110px"><input class="fx-input" value="2026-09-01"></div>
+            <span class="muted">至</span>
+            <div class="fx-input-wrap" style="flex:1;min-width:110px"><input class="fx-input" value="2027-03-31"></div>
+          </div>
+        </div>
+        <div class="fx-form-item">
+          <div class="f-label">编号 <span class="req">*</span></div>
+          <div class="fx-input-wrap">
+            <!-- vue: TeInput v-model="form.code" :class="{ 'is-error': errors.code }" -->
+            <input class="fx-input is-error" value="PRJ-2026-0487">
+          </div>
+          <div class="f-help is-error" role="alert">编号与现有「PRJ-2026-0487」重复，请改为未占用编号。</div>
+        </div>
+        <div class="fx-form-item">
+          <div class="f-label">备注</div>
+          <textarea class="fx-input" rows="2" style="height:auto;padding:8px 12px;resize:vertical;width:100%">跨专业协同，需对接 SCADA 与计量主站。</textarea>
+        </div>
+        <div class="fx-form-item" style="margin-bottom:0">
+          <div class="f-label">只读示例</div>
+          <input class="fx-input" disabled value="已归档项目不可编辑">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 四、状态/标签与徽标 ================= -->
+  <section class="section">
+    <h2>四、状态标签 <span class="en">TeTag</span></h2>
+    <p class="sub">状态用语义浅底标签，文字取对应基准色；互不挪用。数据/图表多序列用 data 色。</p>
+    <div class="field">
+      <div class="label">语义状态</div>
+      <div class="row">
+        <span class="fx-tag is-success"><span class="dot"></span>运行中</span>
+        <span class="fx-tag is-primary"><span class="dot"></span>建设中</span>
+        <span class="fx-tag is-warning"><span class="dot"></span>维护中</span>
+        <span class="fx-tag is-danger"><span class="dot"></span>已停用</span>
+        <span class="fx-tag is-info"><span class="dot"></span>待接入</span>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:0">
+      <div class="label">数据系列色（data1–10，图表/多序列）</div>
+      <div class="row" style="gap:12px">
+        <span class="fx-tag" style="background:var(--te-color-data1-light);color:var(--te-color-data1-default);border-color:var(--te-color-data1-light-border)">#0E6DFA</span><span class="fx-tag" style="background:var(--te-color-data2-light);color:var(--te-color-data2-default);border-color:var(--te-color-data2-light-border)">#13C2C2</span>
+        <span class="fx-tag" style="background:var(--te-color-data3-light);color:var(--te-color-data3-default);border-color:var(--te-color-data3-light-border)">#FA8205</span><span class="fx-tag" style="background:var(--te-color-data4-light);color:var(--te-color-data4-default);border-color:var(--te-color-data4-light-border)">#21B534</span>
+        <span class="fx-tag" style="background:var(--te-color-data5-light);color:var(--te-color-data5-default);border-color:var(--te-color-data5-light-border)">#722ED1</span>
+        <span class="fx-tag is-info">#909399</span>
+        <span style="font-size:12px" class="muted">…完整 10 色见 Colors 页</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 五、弹窗与消息（对话验收用） ================= -->
+  <section class="section">
+    <h2>五、弹窗与反馈 <span class="en">TeDialog / TeMessage</span></h2>
+    <p class="sub">弹层 overlay 白底、柔和阴影、标题 16 分隔线；操作按主次排布在右下。消息气泡用语义浅底。</p>
+    <div class="row" style="margin-bottom:20px">
+      <button class="fx-btn is-primary" id="openDialogBtn">打开弹窗样张</button>
+      <button class="fx-btn is-plain" id="msgOkBtn">成功消息</button>
+      <button class="fx-btn is-danger-plain" id="msgErrBtn">错误消息</button>
+    </div>
+    <div style="max-width:520px" id="dialogSample" hidden>
+      <div class="fx-dialog">
+        <div class="d-head"><span class="d-title">新建项目</span><span class="d-close" onclick="document.getElementById('dialogSample').hidden=true"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span></div>
+        <div class="d-body" style="display:grid;gap:16px">
+          <div><div class="f-label">项目名称 <span class="req">*</span></div><input class="fx-input" placeholder="请输入项目名称"></div>
+          <div><div class="f-label">负责人 <span class="req">*</span></div><div class="fx-select-wrap"><select class="fx-select"><option>张工（研发一组）</option><option>李工（研发二组）</option></select></div></div>
+          <div><div class="f-label">备注</div><textarea class="fx-input" rows="2" style="height:auto;padding:8px 12px;resize:vertical">（可选）</textarea></div>
+        </div>
+        <div class="d-foot">
+          <button class="fx-btn is-plain" onclick="document.getElementById('dialogSample').hidden=true">取消</button>
+          <button class="fx-btn is-primary" onclick="document.getElementById('dialogSample').hidden=true;toast('success','已创建项目：配电物联网示范站')">确定</button>
+        </div>
+      </div>
+    </div>
+    <div class="fx-alert is-success" id="demoToast" hidden style="margin-top:4px"></div>
+  </section>
+
+  <!-- ================= 六、表格局部（操作列/长文本/详情） ================= -->
+  <section class="section">
+    <h2>六、行内细节 <span class="en">in-row details</span></h2>
+    <p class="sub">操作列=文本链 + 危险删除；名称超长截断省略；主次信息分层；详情用描述表（k/v 底 4:1 区分）。</p>
+    <div class="fx-table-wrap" style="margin-bottom:16px">
+      <table class="fx-table">
+        <thead><tr><th>项目名称</th><th>说明</th><th>更新时间</th><th style="text-align:right">操作</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="cell-main" style="max-width:220px"><span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">基于边缘物联代理的 10kV 配电站房智能运维一体化改造项目（示范一期）</span></td>
+            <td class="cell-sub">跨变电 + 配电两个专业组协同</td>
+            <td class="cell-nowrap"><span class="cell-sub">2026-09-06 14:32</span></td>
+            <td class="ops" style="text-align:right"><button class="fx-btn is-link">详情</button><button class="fx-btn is-link">编辑</button><button class="fx-btn is-link is-danger">删除</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- vue: TeDescriptions :column="2" border -->
+    <table class="fx-desc">
+      <tbody>
+        <tr><td class="k">项目负责人</td><td>张工</td><td class="k">所属组织</td><td>研发一组 · 变电</td></tr>
+        <tr><td class="k">计划工期</td><td>2026-09-01 至 2027-03-31</td><td class="k">关联预警通道</td><td>2 条（实时）</td></tr>
+        <tr><td class="k">项目状态</td><td colspan="3"><span class="fx-tag is-success"><span class="dot"></span>运行中</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+  // —— 真实表格数据（示例行；避免编造指标，字段名与数量可核对）——
+  const ROWS = [
+    ['配电物联网示范站（一期）','PRJ-2026-0487','张工','运行中','success','2026-09-07 09:12'],
+    ['关口计量装置远程校验','PRJ-2026-0492','李工','建设中','primary','2026-09-06 18:04'],
+    ['智能巡检通道扩容','PRJ-2026-0501','王工','维护中','warning','2026-09-05 11:40'],
+    ['配变终端批量替换','PRJ-2026-0510','张工','已停用','danger','2026-09-03 16:22'],
+    ['低压台区拓扑校核','PRJ-2026-0515','李工','待接入','info','2026-09-02 10:15'],
+  ];
+  const mapTag = { 'success':'运行中','primary':'建设中','warning':'维护中','danger':'已停用','info':'待接入' };
+  const rowsHtml = ROWS.map(r => `<tr>
+      <td style="width:34px"><input type="checkbox" class="fx-check-table" aria-label="选择行"></td>
+      <td class="cell-main" style="max-width:240px"><span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r[0]}</span></td>
+      <td class="cell-nowrap">${r[1]}</td><td>${r[2]}</td>
+      <td><span class="fx-tag is-${r[4]}"><span class="dot"></span>${mapTag[r[4]]}</span></td>
+      <td class="cell-nowrap cell-sub">${r[5]}</td>
+      <td class="ops" style="text-align:right"><button class="fx-btn is-link">详情</button><button class="fx-btn is-link is-danger">删除</button></td>
+    </tr>`).join('');
+  const tb = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState'), load = document.getElementById('loadingState'), errS = document.getElementById('errorState');
+  function showState(s){
+    document.querySelectorAll('.seg button').forEach(b=>b.classList.toggle('is-on', b.dataset.state===s));
+    const data = s==='data';
+    tb.hidden = !data; empty.hidden = data || s!=='empty'; load.style.display = (s==='loading')?'block':'none'; errS.hidden = s!=='error';
+    if(data) tb.innerHTML = rowsHtml;
+  }
+  document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>showState(b.dataset.state)));
+  document.getElementById('openDialogBtn').addEventListener('click',()=>document.getElementById('dialogSample').hidden=false);
+  let toastTimer;
+  function toast(kind,text){
+    const el=document.getElementById('demoToast');
+    el.hidden=false; el.className='fx-alert is-'+kind;
+    el.textContent=text;
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.hidden=true,2200);
+  }
+  document.getElementById('msgOkBtn').addEventListener('click',()=>toast('success','操作成功：配置已保存'));
+  document.getElementById('msgErrBtn').addEventListener('click',()=>toast('error','保存失败：字段「负责人」缺失'));
+  showState('data');
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "od-design-system-project/v1",
+  "id": "tiansu-web",
+  "name": "Tiansu Web (Te)",
+  "category": "Enterprise / B2B",
+  "description": "Tiansu Te enterprise admin design system. DESIGN.md is the authoritative visual discipline (Chinese); tokens.css is a real snapshot of the Te theme (:root emitted vars from ts-web-package/packages/theme-chalk); components.html and preview/ are reference fixtures.",
+  "source": {
+    "type": "external-theme-snapshot",
+    "origin": "D:\\preject\\ts-web-package\\packages\\theme-chalk\\src\\common\\{extraVar,var}.scss · src\\var.scss · mixins\\{function,_var}.scss"
+  },
+  "files": {
+    "design": "DESIGN.md",
+    "tokens": "tokens.css",
+    "components": "components.html"
+  },
+  "usage": "USAGE.md",
+  "importMode": "normalized",
+  "preview": {
+    "dir": "preview",
+    "pages": [
+      {
+        "path": "preview/colors.html",
+        "role": "colors",
+        "title": "Colors"
+      },
+      {
+        "path": "preview/typography.html",
+        "role": "typography",
+        "title": "Typography"
+      },
+      {
+        "path": "preview/spacing.html",
+        "role": "spacing",
+        "title": "Spacing"
+      }
+    ]
+  }
+}

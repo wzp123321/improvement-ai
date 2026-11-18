@@ -1,0 +1,112 @@
+<!doctype html>
+<!-- tiansu-web · Color preview。色值为真实主题快照：ts-web-package/packages/theme-chalk/src/common/extraVar.scss（$te-colors）与 var.scss。 -->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>tiansu-web · Colors</title>
+<style>
+  :root{
+    --bg-page:#F5F6F8; --card:#fff; --border:#E4E7ED; --text:rgba(0,0,0,.85); --text-2:rgba(0,0,0,.55);
+    --t-primary:#0e6dfa; --t-success:#21b534; --t-warning:#fa8205; --t-danger:#e60a15; --t-info:#909399;
+  }
+  *{box-sizing:border-box} html,body{margin:0}
+  body{background:var(--bg-page);color:var(--text);font-family:'Helvetica Neue',Helvetica,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','微软雅黑',Arial,sans-serif;font-size:14px;line-height:1.7}
+  .page{padding:32px 40px;max-width:1100px;margin:0 auto}
+  h1{font-size:24px;margin:0 0 6px;font-weight:600;color:var(--text)}
+  .crumb{font-size:12px;color:var(--text-2);margin-bottom:14px}.crumb a{color:var(--t-primary);text-decoration:none}
+  .desc{color:var(--text-2);margin:0 0 28px;max-width:80ch}
+  h2{font-size:15px;margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+  h2 .src{font-size:12px;color:var(--text-2);font-weight:400}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:20px 22px;margin-bottom:24px}
+  .grid{display:grid;gap:12px}
+  .sw{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:4px;overflow:hidden;background:#fff}
+  .chip{width:54px;height:44px;flex:none;border-right:1px solid var(--border)}
+  .meta{padding:4px 0;font-size:13px;line-height:1.5}
+  .meta b{font-weight:500;font-size:13px}
+  .meta .hex{font-family:ui-monospace,Consolas,monospace;color:var(--text-2);font-size:12px}
+  .meta .use{color:var(--text-2);font-size:12px}
+  .ramp{display:flex;height:46px;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+  .ramp span{flex:1;display:flex;align-items:flex-end;justify-content:center;font-size:10px;color:rgba(255,255,255,.92);padding-bottom:2px}
+  .ramp .on-dark{color:rgba(0,0,0,.55)}
+  .note{font-size:12px;color:var(--text-2);margin-top:8px}
+  .cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+</style>
+</head>
+<body><div class="page">
+  <div class="crumb"><a href="../components.html">Components</a> · Colors · <a href="typography.html">Typography</a> · <a href="spacing.html">Spacing</a></div>
+  <h1>Colors</h1>
+  <p class="desc">tiansu-web 色板（真实主题快照）。主色基准 #0e6dfa；10 级色板等级越小越浅、第 7 级为基准色；hover=6、active=8、disabled=5、浅底 light=1、light-hover=2、light-border=3。来源：<code>ts-web-package/packages/theme-chalk/src/common/extraVar.scss</code>（$te-colors）与 <code>var.scss</code>。</p>
+
+  <div class="card"><h2>角色色 <span class="src">tsweb design / var.scss $colors.base</span></h2>
+    <div id="roles" class="cols"></div>
+  </div>
+
+  <div class="card"><h2>文字（黑底 alpha）<span class="src">var.scss $text-color</span></h2>
+    <div id="texts" class="grid"></div>
+    <div class="note">在白色上的等效色约：#000000×.85→#262626、.55→#737373、.40→#999999、.25→#BFBFBF。secondary 用于次要信息（≥12px），placeholder/disabled 仅用于占位与禁用，不作为正文色。</div>
+  </div>
+
+  <div class="card"><h2>表面 gray_brand <span class="src">extraVar $te-colors.gray_brand 1–10，供 $bg-color</span></h2>
+    <div id="surfaces" class="grid"></div>
+    <div class="note">页面底 page=1 #F5F6F8；内容卡/表体 blank #FFFFFF；表头等次级面 secondary=2；hover 用 component-hover=4；组件按下 active=6。</div>
+  </div>
+
+  <div class="card"><h2>边框 gray <span class="src">extraVar $te-colors.gray 1–10，供 $border-color</span></h2>
+    <div id="borders" class="grid"></div>
+    <div class="note">控件描边 component=5 #DEDEDE，hover 6 #B5B5B5；分隔线 divider=4 #E8E8E8 / divider-light=3 #EDEDED。</div>
+  </div>
+
+  <div class="card"><h2>语义 10 级色板 <span class="src">extraVar $te-colors.{brand,success,warning,danger} 1–10</span></h2>
+    <div id="ramps" class="grid"></div>
+  </div>
+
+  <div class="card"><h2>数据系列色 data1–10 <span class="src">extraVar $te-colors.color.data1–10（图表/多序列）</span></h2>
+    <div id="datas" class="cols"></div>
+  </div>
+
+  <div class="card"><h2>info 的灰阶映射 <span class="src">extraVar $te-colors.color.info → gray 系</span></h2>
+    <div class="note">info 的 hover/active/disabled/light 取自 gray 而非 info 混白：hover=gray6 #B5B5B5、active=gray8 #828282、disabled=gray5 #DEDEDE、light(bg)=gray1 #F7F7F7、light-border=gray3 #EDEDED、基准 #909399。</div>
+    <div class="sw" style="margin-top:12px"><div class="chip" style="background:#909399"></div><div class="meta"><b>info base</b> <div class="hex">#909399</div></div></div>
+  </div>
+</div>
+<script>
+  const E=(tag,cls,html)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(html!=null)el.innerHTML=html;return el;};
+  function swatch(bg,name,hex,use){
+    const d=document.createElement('div');d.className='sw';
+    const c=E('div','chip');c.style.background=bg;d.appendChild(c);
+    const m=E('div','meta');
+    m.innerHTML='<b></b><div class="hex"></div><div class="use"></div>';
+    m.querySelector('b').textContent=name; m.querySelector('.hex').textContent=hex||bg;
+    if(use)m.querySelector('.use').textContent=use; d.appendChild(m); return d;}
+
+  const roles=[
+    ['#0e6dfa','primary','主色/主操作/选中','主'],['#21b534','success','成功'],['#fa8205','warning','警告'],
+    ['#e60a15','danger/error','危险/错误'],['#909399','info','中性信息'],['#ffffff','white','文字反白'],['#000000','black','']];
+  roles.forEach(([h,n,u])=>{const s=swatch(h,n,h,u); if(h==='#ffffff')s.querySelector('.chip').style.borderRight='1px solid #DEDEDE'; document.getElementById('roles').appendChild(s);});
+
+  const texts=[['rgba(0,0,0,.85)','primary / regular','标题、正文强调（白色上≈#262626）'],['rgba(0,0,0,.55)','secondary','次要说明（≈#737373）'],
+    ['rgba(0,0,0,.40)','placeholder','占位符（≈#999999）'],['rgba(0,0,0,.25)','disabled','禁用（≈#BFBFBF）']];
+  texts.forEach(([h,n,u])=>{const s=swatch(h,n,h,u); s.querySelector('.chip').style.borderRight='1px solid #DEDEDE'; document.getElementById('texts').appendChild(s);});
+
+  const surfaces=[['#FFFFFF','blank','内容卡/表体'],['#F5F6F8','page','页面底 = gray_brand 1'],['#EEF0F3','secondary','次级面 = 2'],
+    ['#E7EAEF','tertiary','三级面 = 3'],['#D3D9E2','component','组件填充 = 5'],['#DFE4EB','component-hover','悬停面 = 4'],
+    ['#AAB2BE','component-active','按下/激活 = 6'],['#EEF0F3','component-disabled','禁用底 = 2']];
+  surfaces.forEach(([h,n,u])=>{document.getElementById('surfaces').appendChild(swatch(h,n,h,u));});
+
+  const borders=[['#DEDEDE','component','控件描边 = gray 5'],['#B5B5B5','component-hover','悬停描边 = 6'],['#E8E8E8','component-light / divider','= 4'],
+    ['#EDEDED','divider-light','= 3（--te-border-color-lighter 同值）'],['#E4E7ED','light','浅描边'],['#F2F6FC','extra-light','最浅']];
+  borders.forEach(([h,n,u])=>{document.getElementById('borders').appendChild(swatch(h,n,h,u));});
+
+  const rampSets=[['brand(primary)',['#E6F0FE','#CFE2FE','#B7D3FD','#9FC5FD','#86B6FD','#5699FC','#0E6DFA','#0B57C8','#07377D','#04214B']],
+    ['success',['#E8F7EA','#D3F0D6','#BCE9C2','#A6E1AE','#90DA99','#64CB71','#21B534','#1A912A','#105A1A','#0A3610']],
+    ['warning',['#FEF2E6','#FEE6CD','#FDD9B4','#FDCD9B','#FDC182','#FCA750','#FA8205','#C86804','#7D4103','#4B2702']],
+    ['danger',['#FCE6E7','#FACED0','#F7B5B9','#F59DA1','#F3848A','#EE545B','#E60A15','#B80811','#73050B','#450306']]];
+  rampSets.forEach(([name,arr])=>{const wrap=E('div'); const h=E('div');h.style.cssText='font-size:12px;color:var(--text-2);margin-bottom:6px';h.textContent=name;
+    const r=E('div','ramp'); arr.forEach((c,i)=>{const s=E('span');s.style.background=c;s.textContent=c; if(i<=3||i>=8)s.classList.add('on-dark'); r.appendChild(s);});
+    wrap.appendChild(h);wrap.appendChild(r);document.getElementById('ramps').appendChild(wrap);});
+
+  const datas=[['#0E6DFA','data1'],['#13C2C2','data2'],['#FA8205','data3'],['#21B534','data4'],['#722ED1','data5'],
+    ['#FAAD14','data6'],['#A0D911','data7'],['#DB1ADB','data8'],['#16DFA3','data9'],['#FA541C','data10']];
+  datas.forEach(([h,n])=>{document.getElementById('datas').appendChild(swatch(h,n,h));});
+</script>
+</body></html>
