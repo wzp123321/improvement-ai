@@ -6,7 +6,10 @@ WorkBuddy 个人技能配置，用于跨机器迁移。换机器后 clone + 跑�
 
 | 分组 | 技能 | 作用 |
 |---|---|---|
-| 开发流水线 | `sdd-orchestrator` | 多智能体编排：需求 → 设计 → 编码 → 评审 → 自测 → 提交 |
+| 开发流水线（OpenSpec 主导 + SDD 接力） | `openspec-explore` / `openspec-propose` | 需求澄清与规划，产出 proposal / spec delta / design / tasks |
+| | `openspec-apply-change` / `openspec-archive-change` | 实施与归档（接力模式下实施交 SDD，archive 收尾） |
+| | `openspec-update-change` / `openspec-sync-specs` | 变更更新与 spec 同步 |
+| | `sdd-orchestrator` | 接力执行：详设 → 波次并行 → 交叉评审 → 集成审计 → 提交 |
 | | `ts-overview` | 阶段一：PRD → 后端概设 + 前端概设 + UI 原型 |
 | | `ts-design` | 阶段二：概设 → 详细设计 DDD |
 | | `ts-design-review` | 设计评审门禁，出 Critical 清单 |
@@ -41,6 +44,18 @@ cd improvement-ai && ./install.sh
 ```
 
 `install.sh` 对每个技能：先复制到 `~/.workbuddy/skills/`（同名目录备份到 `~/.workbuddy/skills-backup-<时间戳>/`），再把 `shared/references/` 注入进去，技能自有同名文件优先、不覆盖。
+
+OpenSpec 系列依赖全局 CLI（`openspec`，v1.14.1）；未安装时技能会在 project check 处停下并提示，不会自动初始化。
+
+### 流程选用（入口仲裁）
+
+| 场景 | 走哪套 |
+|---|---|
+| 新需求，未指定流程 | `openspec-explore` → `openspec-propose`（规划），确认后说「执行」→ `sdd-orchestrator` 接力 |
+| 用户明说「跑编排 / 按 SDD 走」 | `sdd-orchestrator` 全流程 |
+| OpenSpec 产物已确认，说「执行 / 开始实现」 | SDD 接力模式（从详设起，跳过需求澄清） |
+
+接力边界：OpenSpec 的 `design.md` 只读作上游契约；`tasks.md` 由 OpenSpec 独占，SDD 只出 `waves.md` 标波次；进度唯一真源是 `openspec status --change <name> --json`，不写 `.sdd/state.json`。
 
 部署后**重启 WorkBuddy** 才会索引新技能。
 

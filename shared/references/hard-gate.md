@@ -157,7 +157,7 @@
 
 ### 执行顺序
 
-PRD → 概设（并行分派前端/后端两个子 agent 生成前端概设 + 后端概设；UI 由独立子 agent 经 openDesign 产出真组件原型）→ 概设确认后前后端分离（后端概设交付后端团队独立实现；前端继续）→ 详细设计（ts-design skill，**根据概设与 UI 原型逐项落实**） → 设计评审（ts-design-review skill） → 编码实现（ts-implement skill） → Code Review（ts-code-review skill） → 完成检查 → Git 交付（ts-git skill）。**不得跨阶段执行。**
+PRD → 概设（并行分派前端/后端两个子 agent 生成前端概设 + 后端概设；UI 由独立子 agent 经 openDesign 产出真组件原型）→ 概设确认后前后端分离（后端概设交付后端团队独立实现；前端继续）→ 详细设计（ts-design skill，**根据概设与 UI 原型逐项落实**） → 设计评审（ts-design-review skill） → 编码实现（ts-implement skill） → Code Review（ts-code-review skill） → 完成检查 → Git 交付（按本文「Git Commit 规范」执行）。**不得跨阶段执行。**
 
 ### 完成后检查
 
@@ -185,9 +185,7 @@ PRD → 概设（并行分派前端/后端两个子 agent 生成前端概设 + �
 | 编码实现                     | `references/rules/coding-standard.md` + `references/rules/vue-standard.md`                | `ts-implement`                                                                                      |
 | 组件查询                     | —                                                                   | `ts-components`                                                                                     |
 | Code Review                  | —                                                                   | `ts-code-review`                                                                                    |
-| Git 交付                     | `references/hard-gate.md`「Git Commit 规范」                                      | `ts-git`                                                                                            |
-| Debug                        | —                                                                   | `ts-debug`                                                                                          |
-| 重构                         | —                                                                   | `ts-refactor`（待建设）                                                                             |
+| Git 交付                     | 本文「Git Commit 规范」                                                            | —（无 skill：直接按本文件规范执行）                                                                  |
 
 > **内置 openDesign 规范层（零运行依赖）**：契约 `references/rules/ui-prototype-standard.md` + 品牌 `references/design-systems/tiansu-web/` + 工艺 `references/rules/hifi-craft.md` + `references/assets/open-design/craft/` + **运行壳 `references/assets/prototype-sandbox/`**（拷进 `<项目根>/prototype/` 后 `npx vite` 即可跑，依赖用项目的 `node_modules`），随插件发布，详见 `references/assets/open-design/README.md`。`od lint` / `od export` 为可选增强，不可用时退化为人工清单。
 
