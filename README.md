@@ -29,7 +29,9 @@ sync-back.sh            回同步：本机 → 仓库，自动剔除公共文件
 
 ts 系列原先每个技能各带一份完全相同的 `references`（同一份内容复制 7 份），改一处要改七处。现在只存 `shared/` 一份，部署时注入。
 
-两个文件保留了各技能自己的版本、没有共享：`rules/coding-standard.md`、`rules/vue-standard.md` —— 它们在 `ts-code-review` 与其余 6 个里内容不同。
+公共部分统一到 `shared/references/`，各技能目录里只剩独占文件：`ts-components` 的 `code-generation.md`、`ts-frontend-design` 的 5 个 `recipes/`。
+
+`rules/coding-standard.md` 与 `rules/vue-standard.md` 曾出现两种版本（模块 hook `use{Module}` 与 `useTable` 的分叉），现已统一采用模块 hook 版。
 
 ## 部署
 

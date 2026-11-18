@@ -50,12 +50,13 @@ when-to-use: "设计文档已确认且设计评审无 Critical 问题，需要�
 
 ```
 === 设计遵循清单 ===
-【L1 新增文件】（共 9 个）
+【L1 新增文件】（共 10 个）
   src/apis/orderManage/index.api.ts
   src/apis/orderManage/index.ts
   src/router/modules/orderManage.ts
   src/views/orderManage/index.vue
   src/views/orderManage/constant.ts
+  src/views/orderManage/hooks/useOrderManage.ts
   src/views/orderManage/hooks/useBtnHandles.ts
   src/views/orderManage/modules/createForm.vue
   src/views/orderManage/modules/editForm.vue
