@@ -18,6 +18,19 @@ WorkBuddy 个人技能配置，用于跨机器迁移。换机器后 clone + 跑�
 | 环境 | `project-map` | 仓库索引：路径、启动命令、端口 |
 | 工具 | `grill-me` | 反问到底，压力测试方案 |
 
+## 结构
+
+```
+skills/<name>/          技能独有文件（SKILL.md + 该技能特有的 references）
+shared/references/      7 个 ts 技能共用的一份 rules / templates / assets
+install.sh              部署：复制技能 + 注入 shared
+sync-back.sh            回同步：本机 → 仓库，自动剔除公共文件
+```
+
+ts 系列原先每个技能各带一份完全相同的 `references`（同一份内容复制 7 份），改一处要改七处。现在只存 `shared/` 一份，部署时注入。
+
+两个文件保留了各技能自己的版本、没有共享：`rules/coding-standard.md`、`rules/vue-standard.md` —— 它们在 `ts-code-review` 与其余 6 个里内容不同。
+
 ## 部署
 
 ```bash
@@ -25,12 +38,17 @@ git clone git@github.com:wzp123321/improvement-ai.git
 cd improvement-ai && ./install.sh
 ```
 
-`install.sh` 把 `skills/` 下每个目录复制到 `~/.workbuddy/skills/`，同名目录先备份到 `~/.workbuddy/skills-backup-<时间戳>/`。
+`install.sh` 对每个技能：先复制到 `~/.workbuddy/skills/`（同名目录备份到 `~/.workbuddy/skills-backup-<时间戳>/`），再把 `shared/references/` 注入进去，技能自有同名文件优先、不覆盖。
 
 部署后**重启 WorkBuddy** 才会索引新技能。
 
+注意：仓库里的 `skills/` 不能直接当技能用 —— `references` 是部署时补齐的。
+
 ## 维护
 
-- 改技能：改 `skills/<name>/SKILL.md`，`git push`。
-- 本机装好的技能要同步回仓库：`./sync-back.sh`（从 `~/.workbuddy/skills/` 覆盖仓库内同名目录）。
-- 新增技能：把目录复制进 `skills/` 再 push。
+| 场景 | 做法 |
+|---|---|
+| 改某个技能的 SKILL.md | 直接改 `skills/<name>/SKILL.md`，push |
+| 改公共规范（rules / templates） | 只改 `shared/references/` 一处，push，重新跑 `install.sh` |
+| 本机改完要回流 | `./sync-back.sh`，逐字节相同于 shared 的文件会被自动剔除 |
+| 新增技能 | 目录复制进 `skills/`，独有文件留在里面，公共部分并入 `shared/` |
