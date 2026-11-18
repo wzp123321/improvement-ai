@@ -118,14 +118,6 @@ archive-spec/product/
 - 命名：场景号两位补零 + 下划线（`S01_公告列表.vue`），**不用**连字符写法
 - `prototype/` 写进项目 `.gitignore`
 
-**归档后刷新跨项目索引**（约 20 秒）：
-
-```bash
-bash D:/workspace/company/design-workspace/gen-index.sh
-```
-
-`archive-spec/product/` 下的 `overview-be-*` / `overview-fe-*` / `ui-*/` 是索引「概设」列的来源。不重跑，`design-workspace/INDEX.md` 就不知道本次产出 —— 索引只读文件名、不读内容（绕开亿赛通加密），不会自己更新。
-
 ## Step 4：停止并等待确认 ⛔
 
 **产物落位后立即停止，不进入 ts-design。**
@@ -141,7 +133,6 @@ bash D:/workspace/company/design-workspace/gen-index.sh
 - [ ] 后端概设 + 前端概设已落位并归档
 - [ ] 有页面场景时 UI 原型已产出、**已真实构建渲染过**
 - [ ] 三件产物按 S-xx 对齐完成
-- [ ] **已重跑 `gen-index.sh`，`design-workspace/INDEX.md` 的「概设」列为 ✓**
 - [ ] 用户已确认
 
 **任一未满足 → 不得进入 ts-design。**
