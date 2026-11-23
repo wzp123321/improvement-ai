@@ -24,11 +24,11 @@ Otherwise, with no root, what happens next depends on how this workflow was reac
 
 In both branches, never create the root as a side effect: do not run `openspec init` until the user asks for it, do not hand-create `openspec/` files, and do not let a command create it.
 
-**SDD 接力闸门（硬门，先判再走）**：若本项目存在 `sdd-orchestrator` skill（扫描 `{workspace}/.workbuddy/skills/` 与 `~/.workbuddy/skills/`），且用户**没有**明确说「不用 SDD / 直接 apply / 跳过编排」，则**停止本流程**，不执行下面的任何步骤，提示：
+**SYNERGOI 接力闸门（硬门，先判再走）**：若本项目存在 `sdd-orchestrator` skill（扫描 `{workspace}/.workbuddy/skills/` 与 `~/.workbuddy/skills/`），且用户**没有**明确说「不用 SDD / 直接 apply / 跳过编排」，则**停止本流程**，不执行下面的任何步骤，提示：
 
-> 检测到本项目启用 `sdd-orchestrator`。直接 apply 会绕过交叉评审、集成审计、运行时实测门。请说「执行」进入 SDD 接力（详设 → 波次并行 → 评审 → 审计 → 提交）；确认要走原生 apply 请说「不用 SDD，直接 apply」。
+> 检测到本项目启用 `sdd-orchestrator`。直接 apply 会绕过交叉评审、集成审计、运行时实测门。请说「执行」进入 SYNERGOI 接力（详设 → 波次并行 → 评审 → 审计 → 提交）；确认要走原生 apply 请说「不用 SDD，直接 apply」。
 
-仅当收到绕开声明后继续执行。本门仅拦误用：正常 SDD 接力路径不经本 skill，零额外动作。
+仅当收到绕开声明后继续执行。本门仅拦误用：正常 SYNERGOI 接力路径不经本 skill，零额外动作。
 
 **Input**: Optionally specify a change name (e.g., `/openspec-apply-change add-auth`). If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
 

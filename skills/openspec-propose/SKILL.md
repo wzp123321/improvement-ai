@@ -172,6 +172,6 @@ After completing all artifacts, summarize:
 - If a change with that name already exists, ask if user wants to continue it or create a new one
 - Verify each artifact file exists after writing before proceeding to next
 
-**WorkBuddy 交接提示（产物确认后）**：向用户呈现产物并等待确认时，末尾加一句：「规划产物已就绪。确认后如需执行，说『执行』即交 `sdd-orchestrator` 接力（详设 → 波次并行 → 交叉评审 → 集成审计 → 提交）；不自动切换，等你明确指令。」
+**WorkBuddy 交接提示（产物确认后）**：向用户呈现产物并等待确认时，末尾加一句：「规划产物已就绪。确认后如需执行，说『执行』即交 `sdd-orchestrator` 进入 SYNERGOI 接力（详设 → 波次并行 → 交叉评审 → 集成审计 → 提交）；不自动切换，等你明确指令。」
 
-**接力边界**：propose 只负责规划，产物冻结后不再改；SDD 接力阶段产出 `waves.md`（引用本 change 的 tasks 编号标波次）与详设（引用本 `design.md`，只读不推翻），进度仍以 `openspec status --change <name> --json` 为唯一真源。
+**接力边界**：propose 只负责规划，产物冻结后不再改；SYNERGOI 接力阶段产出 `waves.md`（引用本 change 的 tasks 编号标波次）与详设（引用本 `design.md`，只读不推翻），进度仍以 `openspec status --change <name> --json` 为唯一真源。

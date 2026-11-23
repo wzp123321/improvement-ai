@@ -2,11 +2,17 @@
 
 WorkBuddy 个人技能配置，用于跨机器迁移。换机器后 clone + 跑一次 `install.sh` 即可恢复。
 
+## SYNERGOI
+
+希腊语 συνεργός 的复数，「一同工作者」—— 这套开发流水线的形态：多个 fresh-context 子智能体各持一段，靠磁盘产物交接，合为一次交付。
+
+`openspec-*` 定契约，`sdd-orchestrator` 编排执行，`ts-*` 提供各阶段规范。入口仲裁见下文「流程选用」。
+
 ## 技能
 
 | 分组 | 技能 | 作用 |
 |---|---|---|
-| 开发流水线（OpenSpec 主导 + SDD 接力） | `openspec-explore` / `openspec-propose` | 需求澄清与规划，产出 proposal / spec delta / design / tasks |
+| SYNERGOI 开发流水线（OpenSpec 主导 + SDD 接力） | `openspec-explore` / `openspec-propose` | 需求澄清与规划，产出 proposal / spec delta / design / tasks |
 | | `openspec-apply-change` / `openspec-archive-change` | 实施与归档（接力模式下实施交 SDD，archive 收尾） |
 | | `openspec-update-change` / `openspec-sync-specs` | 变更更新与 spec 同步 |
 | | `sdd-orchestrator` | 接力执行：详设 → 波次并行 → 交叉评审 → 集成审计 → 提交 |
